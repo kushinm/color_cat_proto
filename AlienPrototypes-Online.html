@@ -247,7 +247,7 @@ var overview_instructions = {
 
 // Setting up parameters for categorization //
     var alienCounter
-        (alienCounter = []).length = 15; alienCounter.fill(0) // update to number of aliens!!!
+        (alienCounter = []).length =5; alienCounter.fill(0) // update to number of aliens!!!
     var breakCounter = 1; // Counts number of trials for a block
     var blockCounter = 0; // Counts which block
     
@@ -378,7 +378,7 @@ var overview_instructions = {
                 // SLUB Part 2: Motion Feedback 
                 var text_feedback_motion = {
                 type: 'image-keyboard-responseMAS',
-                stimulus: "img/"+whichCondition+"/Curvy-"+whichCurvy+".png",
+                stimulus:  "img/"+whichCondition+"/Curvy-"+whichCurvy+".png",
                 trial_duration: 500,
                 species: "SLUB", 
                 labels: ["FILK", "SLUB"],
@@ -431,7 +431,7 @@ var overview_instructions = {
                 "<p> Please press the left or right arrow key when you are ready to start the next block. </p>";}
                 } 
                 timeline.push(accuracy_block)
-                breakCounter = 1;      
+                breakCounter = 1;    
                          
             }else{
             }
@@ -705,9 +705,32 @@ function sendData() {
   xhr.send(jsPsych.data.get().json());
 }*/
 
+
+var c = 0; 
+var imgSet = [] ;
+for (i = 0; i <= 1;){
+    for (j =0; j <=5;){
+        if (i == 0){
+            alienName = "img/"+whichCondition+"/Point-"+whichShape+".png";
+        }else{
+            alienName = "img/"+whichCondition+"/Curvy-"+whichShape+".png";
+        }
+        imgSet[c] = alienName; 
+        c = c+1; 
+        }
+    }
+    console.log(imgSet)
+
+/*var imgSet = ["img/"+whichCondition+"/Point-0.png",
+            "img/"+whichCondition+"/Point-1.png",
+            "img/"+whichCondition+"/Curvy-0.png",
+            "img/"+whichCondition+"/Curvy-1.png",] ;*/
+
 // Run the timeline sequence //
 jsPsych.init({
+    // condition selection + preload images here. 
         timeline: timeline,
+        preload_images: imgSet,
         //on_finish: saveData // this line calls function to save to database
         // shows the output code- delete later once have files being written & saved /
        /* on_finish: function() {
