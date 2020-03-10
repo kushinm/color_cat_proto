@@ -247,7 +247,7 @@ var overview_instructions = {
 
 // Setting up parameters for categorization //
     var alienCounter
-        (alienCounter = []).length =5; alienCounter.fill(0) // update to number of aliens!!!
+        (alienCounter = []).length =180; alienCounter.fill(0) // update to number of aliens!!!
     var breakCounter = 1; // Counts number of trials for a block
     var blockCounter = 0; // Counts which block
     
@@ -297,7 +297,8 @@ var overview_instructions = {
 
             // Categorization trial for SLUB
             } else if (whichShape >= alienCounter.length/2){   // Code SLUB images as >= 90
-                   var  whichCurvy = whichShape - 2; // This subtraction accounts for the numbers restarting for curvy, but if the random # generator picks a # > 75, itll be a slub
+                   var  whichCurvy = whichShape - (alienCounter.length/2); // This subtraction accounts for the numbers restarting for curvy, but if the random # generator picks a # > 75, itll be a slub
+                    console.log(whichCurvy,alienCounter.length)
                     var cat_trial = {
                     type: 'image-keyboard-responseMAS',
                     stimulus: "img/"+whichCondition+"/Curvy-"+whichCurvy+".png",
@@ -357,7 +358,7 @@ var overview_instructions = {
              
             // SLUB feedback  Part 1: Give text feedback
             } else if (whichShape >= alienCounter.length/2){
-                var  whichCurvy = whichShape - 2; 
+                var  whichCurvy = whichShape - (alienCounter.length/2); 
                 var text_feedback = {
                 type: 'image-keyboard-responseMAS',
                 stimulus: "img/"+whichCondition+"/Curvy-"+whichCurvy+".png",
@@ -708,8 +709,8 @@ function sendData() {
 
 var c = 0; 
 var imgSet = [] ;
-for (i = 0; i <= 1;){
-    for (j =0; j <=5;){
+for (i = 0; i <= 1;i++){
+    for (j =0; j <90;j++){
         if (i == 0){
             alienName = "img/"+whichCondition+"/Point-"+whichShape+".png";
         }else{
