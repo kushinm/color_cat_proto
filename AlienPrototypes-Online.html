@@ -1,0 +1,704 @@
+<!-- Alien color-concept association experiment for online data collection -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AlienPrototypes-Online</title>
+        <!-- Load in the jspsych tools, plugins,and layout -->
+        <script src= "scripts/jspsych.js"></script>   
+        <script src= "scripts/jspsych-html-keyboard-response.js"></script>
+        <script src= "scripts/jspsych-html-button-response.js"></script>
+        <script src= "scripts/jspsych-image-keyboard-responseMAS.js"></script>
+        <script src = "scripts/jspsych-image-slider-responseMAS.js"></script>
+        <script src = "scripts/jspsych-image-slider-response_InstrMAS.js"></script>
+        <script src = "scripts/jspsych-fullscreen.js"></script>
+        <script src = "scripts/jspsych-survey-text.js"></script>
+        <script src = "scripts/jspsych-survey-multi-select.js"></script>   
+        <script src = "scripts/jspsych-survey-multi-selectMAS.js"></script>   
+        <script src = "scripts/jspsych-survey-multi-choice.js"></script>
+        <link href= "scripts/jspsychMAS.css" rel="stylesheet" type="text/css"></link>
+        <style>
+        </style>
+    </head>
+    <body>          
+    </body> 
+
+
+<!--------------------- Here is where the experiment is created ------------------------------------------->
+    <script>
+
+// Get mTURK information // 
+/*var turkInfo = jsPsych.turk.turkInfo();
+
+// workerID
+turkInfo.workerId
+
+// hitID
+turkInfo.hitId
+
+// assignmentID
+turkInfo.assignmentId*/
+        
+
+
+// Create timeline variable //  
+    var timeline = []; 
+
+// Set background color to gray //
+    document.body.style.backgroundColor = "rgb(88,88,88)" 
+
+
+// Randomly selecting a condition: //
+    // Condition 0: Categorize on Prototypical colors 
+    // Condition 1: Categorize on non-prototypical colors
+function getRandomIntInclusive(min, max) {
+                    min = Math.ceil(min);
+                    max = Math.floor(max);
+                    return  Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+                    }
+var whichCondition = getRandomIntInclusive(0,1); //Select condition
+jsPsych.data.addProperties({condition: whichCondition}); //Add condition to output file
+        
+
+//Enter fullscreen mode- asks participants to press "continue" button to enter full screen 
+timeline.push({
+    type: 'fullscreen',
+    fullscreen_mode: true  //change to true to turn on & false to turn off
+})
+
+// Consent form
+    //Function to check that consent was given
+   /* var check_consent = function(elem) {
+        if (document.getElementById('consent_checkbox').checked) {
+            return true;
+        }
+        else {
+            alert("If you wish to participate, you must check the box next to the statement 'I agree to participate in this study.'");
+            return false;
+        }
+        return false;
+        };
+
+      var consentSign = {
+        type: 'external-html',
+        url: "OnlineConsentForm.html",
+        cont_btn: "start",
+        check_fn: check_consent
+        //force_refresh: true
+        }; 
+    timeline.push(consentSign); */
+  //  <div id ="consentForm" ></div>,//
+// Consent 
+
+   var consentSign = {
+        type: 'survey-multi-selectMAS',
+        questions: [
+            {prompt: 
+            "  <strong>UNIVERSITY OF WISCONSIN-MADISON</strong>" +
+            "  <br><strong>Research Participant Information and Consent Form</strong>" +
+            " <br><br><strong>Title of the Study:</strong> Investigating how observers perceive, interpret, and evaluate visual features in 2D scenes and 3D environments" +
+            " <br><br><strong>Principal Investigator:</strong> Karen B. Schloss (phone: 608-316-4495) (email: kschloss@wisc.edu)" +
+            "  <br><br><strong><u>DESCRIPTION OF THE RESEARCH</u></strong>" +
+            "  <br>You are invited to participate in a research study about how visual features influence the ability to perceive, interpret, navigate, and remember information in visual displays" +
+            "  <br><br>You have been asked to participate because you accepted the HIT on Amazon Mechanical Turk." +
+            "  <br><br>The purpose of the research is to understand principles by which people perceive, evaluate and interpret visual information (e.g., the meaning of parts of a scientific diagram)." +
+            "  <br><br>This study will include adults (at least 18 yrs) from who participate in Amazon Mechanical Turk HITs." +
+            "  <br><br>The research will be conducted on the electronic device that you are using." +
+            "  <br><br><strong><u>WHAT WILL MY PARTICIPATION INVOLVE?</u></strong>" +
+            "  <br>If you decide to participate in this research you will be presented with visual displays containing images and/or text and will be asked to make judgments about them. For example, you may see shapes and be asked how round they appear or view a graph with a legend and interpret information about the data in the graph. You will be asked to respond by making button presses on a keyboard/mouse. You may be asked to complete questionnaires about your expertise or educational level in a given domain (e.g., neuroscience) and questionnaires about what sorts of things you like/dislike. Finally, you may be asked to respond to questions about your experience during the experiment (e.g., how much you enjoyed the task)." +
+            "  <br><br>You will be asked to complete 2-6 surveys or tasks." +
+            "  <br><br>Your participation will last approximately 5 min - 60 min per session and will require 1 session." +
+            "  <br><br><strong><u>ARE THERE ANY RISKS TO ME?</u></strong>" +
+            "  <br>We don't anticipate any risks to you from participation in this study." +
+            "  <br><br><strong><u>ARE THERE ANY BENEFITS TO ME?</u></strong>" +
+            "  <br>We don't expect any direct benefits to you from participation in this study." +
+            "  <br><br><strong><u>WILL I BE COMPENSATED FOR MY PARTICIPATION?</u></strong>" +
+            "  <br>The amount of compensation depends on the length of the tasks: $0.10 for 5 min, $0.30 for 10 min, $0.60 for 15 min, $0.80 for 20 min, $1.50 for 30 min, $3.00 for 60 min. The compensation amount for this HIT, as specified in the HIT description, was pre-determined based on the amount of time it took previous participants to do similar tasks." +
+            "  <br><br>If you do withdraw prior to the end of the study, you will receive no compensation." +
+            "  <br><br><strong><u>HOW WILL MY CONFIDENTIALITY BE PROTECTED?</u></strong>" +
+            "  <br>Participant information will remain confidential. Neither your name or any other identifiable information will be recorded. Typically, group characteristics will be published, but datasets with individual responses may also be shared. In such cases, the data will not be linked to your name or other identifiable information." +
+            "  <br><br><strong><u>WHOM SHOULD I CONTACT IF I HAVE QUESTIONS?</u></strong>" +
+            "   <br>You may ask any questions about the research at any time. If you have questions about the research you can contact the Principal Investigator Karen B. Schloss at 608-316-4495." +
+            "   <br><br>If you are not satisfied with response of research team, have more questions, or want to talk with someone about your rights as a research participant, you should contact the Education and Social/Behavioral Science IRB Office at 608-263-2320." +
+            "  <br><br>Your participation is completely voluntary. If you decide not to participate or to withdraw from the study you may do so without penalty." +
+            "  <br><br>By clicking the box below, you confirm that you have read this consent form, had an opportunity to ask any questions about your participation in this research and voluntarily consent to participate. You may print a copy of this form for your records." +
+            "  <br><br>Please click the box below next to the text “I consent” to give your informed consent to participate. " +
+            "   </p>",
+            options: ["<strong>I consent</strong>"],
+            horizontal: false,
+            required: true, 
+            name: 'Consent'},
+            ],
+            // preamble:  "Consent",
+        button_label: "Start Experiment",
+        };
+    timeline.push(consentSign); 
+
+
+// Overview instructions of experiment 
+var overview_instructions = {
+            type: 'html-button-response',
+            stimulus: 'Welcome! <p> This experiment involves three parts: demographic information, followed by two experimental tasks.' +
+            '<p> It will take about 30 minutes to complete all three parts.' +
+            '<p> After completion you will be redirected to mTurk to be awarded credit for your participation.',
+            choices: ['Continue']
+        }
+     timeline.push(overview_instructions);
+
+
+
+// Demographic questions 
+    // Gender and handedness
+    var gender_hand = {
+        type: 'survey-multi-select',
+        questions: [
+            {prompt: "Gender",
+            options: ["Male", "Female", "Other"],
+            horizontal: false,
+            required: false, 
+            name: 'Gender'},
+
+            {prompt: "Preferred hand",
+            options: ["Left", "Right"],
+            horizontal: false,
+            required: false, 
+            name: 'Hand'},
+        ],
+        preamble: "Please respond to the following questions.",
+        button_label: "Done",
+        randomize_question_order: false
+        }; 
+    timeline.push(gender_hand); 
+
+
+    // Race/ethnicity & hispanic
+    var race_eth = {
+        type: 'survey-multi-select',
+        questions: [
+            {prompt: "",
+            options: ["Caucasian", "Black", "Asian","Pacific Islander", "Other"],
+            horizontal: false,
+            required: false, 
+            name: 'Race/Ethnic'},
+
+            {prompt: "",
+            options: ["Hispanic or Latino", "Not Hispanic or Latino"],
+            horizontal: false,
+            required: false, 
+            name: 'Hispanic/Latino'},
+            ],
+        preamble: "Please select all that apply.",
+        button_label: "Done",
+        randomize_question_order: false
+        }; 
+    timeline.push(race_eth); 
+
+
+     // Age and language 
+    var age_lang_demo = {
+            type: 'survey-text',
+            questions: [
+                {prompt: "Age", name: 'Age', rows: "1", columns: "3"},
+                {prompt: "List all languages spoken", name: "Languages", rows: "6", columns: "60"}
+            ],
+            preamble: "Please answer the following questions.",
+            button_label: "Done",
+            randomize_question_order: false
+        }
+        timeline.push(age_lang_demo); 
+
+
+// Consent and demo Completion 
+    var demo_completion = {
+            type: "html-keyboard-response",
+            stimulus: "<p>Great job!</p> You have completed the consent process and answered the demographic questions." +
+            "<p> Press the left or right arrow key to continue to the first experimental task. </p>"
+        };
+        timeline.push(demo_completion); 
+
+
+
+
+/*----------------------------------Part 1: Alien Categorization------------------------------------ */
+
+
+// Categorization Instructions 
+    var cat_instructions = {
+        type: "html-keyboard-response",
+        stimulus: "<p>During this experiment you will be presented with images of aliens from the planet Sparl." +
+        "<br>The aliens come from two different species, either the FILK species or the SLUB species.</p>" +
+        "<p>FILKS and SLUBS have slightly different visual features.Your task is to learn how to identify these two species based on their visual features."+
+        "<br>On each trial, the two species' names will appear at the top of the screen, FILK on the left and SLUB on the right, with one alien centered below.</p>" +
+        "<br></br>"+
+        "<p>If you think the alien is a FILK, press the left arrow key."+
+        "<br>If you think the alien is a SLUB, press the right arrow key.</p>" +
+        "<br></br>"+        
+        "<p>After you respond, you will be told the correct answer and the alien will move below its species name." +
+        "<br>There will then be a brief pause and the next trial will begin.</p>"+
+        "<p>At first, you may feel like you are guessing, but as you see more aliens, you may begin to feel more confident in your responses.</p>"+
+        "<p>There will be 5 blocks of trials. At the end of each block, you will get to see your accuracy from that block."+
+        "<br>This part of the experiment will take about 20 minutes.</p>"+
+        "<p>Please press the left of right arrow key to begin.</p>",
+        post_trial_gap: 500
+    }; 
+    timeline.push(cat_instructions); 
+
+
+
+// Setting up parameters for categorization //
+    var alienCounter
+        (alienCounter = []).length = 15; alienCounter.fill(0) // update to number of aliens!!!
+    var breakCounter = 1; // Counts number of trials for a block
+    var blockCounter = 0; // Counts which block
+    
+
+// Inter trial interval //
+    var fixation = {
+                type: 'html-keyboard-response',
+                stimulus: '<div style= "font-size:40px;">+</div>',
+                choices: jsPsych.NO_KEYS,
+                trial_duration: 500}    
+
+
+                           
+// Categorization Procedure // 
+    for (t =0; t < alienCounter.length;){    // FIX BECAUSE IMAGES START AT 1 BUT THIS WANTS TO CALL TO 0. 
+    
+
+        // Randomly selecting an alien
+        function getRandomIntInclusive(min, max) {
+                    min = Math.ceil(min);
+                    max = Math.floor(max);
+                    return  Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+                    }
+        var whichShape =  getRandomIntInclusive(0,alienCounter.length);
+        //whichShape = whichShape +1; // add 1 because starts at 0. 
+        if (alienCounter[whichShape] == 0){
+
+            // ITI
+            timeline.push(fixation)
+
+            // Categorization trial for FILK
+            if (whichShape < alienCounter.length/2){  // Code FILK images as < 90 
+                var cat_trial = {
+                    type: 'image-keyboard-responseMAS',
+                    stimulus: "img/"+whichCondition+"/Point-"+whichShape+".png",
+                    choices: [37, 39],
+                    labels: ["FILK", "SLUB"],
+                    prompt: "<p>YES.<br>This is a<br>FILK</p>", //Printed in white ink to preserve spacing when present feedback
+                    prompt_location: "above",
+                    trial_type: "Present",
+                    on_finish: function(data){
+                        if(data.key_press == 37){
+                            data.correct = true; 
+                        } else if ( data.key_press == 39){
+                            data.correct = false;}
+                    }}
+
+            // Categorization trial for SLUB
+            } else if (whichShape >= alienCounter.length/2){   // Code SLUB images as >= 90
+                   var  whichCurvy = whichShape - 2; // This subtraction accounts for the numbers restarting for curvy, but if the random # generator picks a # > 75, itll be a slub
+                    var cat_trial = {
+                    type: 'image-keyboard-responseMAS',
+                    stimulus: "img/"+whichCondition+"/Curvy-"+whichCurvy+".png",
+                    choices: [37, 39],
+                    labels: ["FILK", "SLUB"],
+                    prompt_location: "above",
+                    trial_type: "Present",
+                    prompt: "<p>YES.<br>This is a<br>SLUB</p>",//Printed in white ink to preserve spacing when present feedback
+                    on_finish: function(data){
+                        if(data.key_press == 37){
+                            data.correct = false;
+                        } else if ( data.key_press == 39){
+                            data.correct = true;
+                        }
+                    }}   
+            }
+            timeline.push(cat_trial)
+
+        // Feedback sequence: Two Parts: 1) Text feedback 2) Move alien under name
+            // FILK feedback  Part 1: Give text feedback 
+           if (whichShape < alienCounter.length/2){
+                var text_feedback = {
+                type: 'image-keyboard-responseMAS',
+                stimulus: "img/"+whichCondition+"/Point-"+whichShape+".png",
+                trial_duration: 500,
+                species: "FILK",
+                labels: ["FILK", "SLUB"],
+                response_ends_trial: false, 
+                prompt_location: "above",
+                trial_type: "TextFeed",
+                prompt:  function(){
+                    var last_trial_correct = jsPsych.data.get().last(1).values()[0].correct;
+                    if(last_trial_correct){
+                    return  "<p>YES.<br>This is a<br>FILK</p>";
+                    } else {
+                    return "<p>NO.<br>This is a<br>FILK</p>"
+                    }}
+                }   
+             // FILK Part 2: Motion Feedback 
+             var text_feedback_motion = {
+                type: 'image-keyboard-responseMAS',
+                stimulus: "img/"+whichCondition+"/Point-"+whichShape+".png",
+                trial_duration: 500,
+                species: "FILK",
+                labels: ["FILK", "SLUB"],
+                response_ends_trial: false, 
+                prompt_location: "above",
+                trial_type: "MotionFeed",
+                prompt:  function(){
+                    var last_trial_correct = jsPsych.data.get().last(2).values()[0].correct;
+                    if(last_trial_correct){
+                        return "<p>YES.<br>This is a<br>FILK</p>";
+                    } else {
+                    return "<p>NO.<br>This is a<br>FILK</p>"
+                    }}
+                }   
+             
+            // SLUB feedback  Part 1: Give text feedback
+            } else if (whichShape >= alienCounter.length/2){
+                var  whichCurvy = whichShape - 2; 
+                var text_feedback = {
+                type: 'image-keyboard-responseMAS',
+                stimulus: "img/"+whichCondition+"/Curvy-"+whichCurvy+".png",
+                trial_duration: 500,
+                species: "SLUB", 
+                labels: ["FILK", "SLUB"],
+                response_ends_trial: false, 
+                trial_type: "TextFeed",
+                prompt_location: "above",
+                prompt:  function(){
+                    var last_trial_correct = jsPsych.data.get().last(1).values()[0].correct;
+                    if(last_trial_correct){
+                    return "<p>YES.<br>This is a<br>SLUB</p>";
+                    } else {
+                    return  "<p>NO.<br>This is a<br>SLUB</p>"
+                    }}
+                }
+                // SLUB Part 2: Motion Feedback 
+                var text_feedback_motion = {
+                type: 'image-keyboard-responseMAS',
+                stimulus: "img/"+whichCondition+"/Curvy-"+whichCurvy+".png",
+                trial_duration: 500,
+                species: "SLUB", 
+                labels: ["FILK", "SLUB"],
+                response_ends_trial: false, 
+                prompt_location: "above",
+                trial_type: "MotionFeed",
+                prompt:  function(){
+                    var last_trial_correct = jsPsych.data.get().last(2).values()[0].correct;
+                    if(last_trial_correct){
+                        return "<p>YES.<br>This is a<br>SLUB</p>";
+                    } else {
+                    return  "<p>NO.<br>This is a<br>SLUB</p>"
+                    }}
+                }
+            }
+          
+            timeline.push(text_feedback) 
+            timeline.push(text_feedback_motion) 
+
+            breakCounter = breakCounter + 1; // counts after finishing the trial   
+
+
+            // Accuracy block 
+            if (breakCounter > alienCounter.length/5){
+                if (t < alienCounter.length/5){// why do i need this for it to work???
+                     whichBlock = 1;
+                } else if (t >=alienCounter.length/5 && t < (alienCounter.length/5)*2){
+                      whichBlock = 2;
+                }else if (t >=(alienCounter.length/5)*2 && t < (alienCounter.length/5)*3){
+                      whichBlock = 3;
+                }else if (t >=(alienCounter.length/5)*3 && t < (alienCounter.length/5)*4){
+                      whichBlock = 4;
+                }else if (t >=(alienCounter.length/5)*4){
+                      whichBlock = 5;
+                }
+
+                var accuracy_block = {
+                type: "html-keyboard-response",
+                stimulus: function () {
+                    var incrementCount = (function (){
+                    //var blockCounter = 0;
+                    return function () {blockCounter += 1;  return blockCounter}
+                })(); 
+                incrementCount();
+                // Calculate the accuracy 
+                var accuracy = Math.round(jsPsych.data.get().last((alienCounter.length/5)*4).filter({correct:true}).count()/(alienCounter.length/5)*100); //number of trials in a block*4(fixation + trial + 2feedback for each alien)
+                return "<p>You have completed block <br>"+blockCounter+" of 5.</p>" +
+                "<p> Your accuracy for this block was "+accuracy+"%." +
+                "<br></br>" +
+                "<p> Please press the left or right arrow key when you are ready to start the next block. </p>";}
+                } 
+                timeline.push(accuracy_block)
+                breakCounter = 1;      
+                         
+            }else{
+            }
+            alienCounter[whichShape] = 1; 
+            t++;
+        } else{ 
+        }
+    }
+
+    // Questionnaire 1 
+    var questionnaire_1 = {
+        type: 'survey-text',
+        questions: [
+            {prompt: "Please describe what strategy you used for the previous task.", name: 'Strategy', rows: "6", columns: "60"},
+            {prompt: "Were there any visual features that you paid particular attention to complete the previous task?" +
+            "<br>If so, what features did you attend to? If not please type 'None'.", name: "Features", rows: "6", columns: "60"}
+        ],
+        preamble: "Please answer the following questions.",
+        button_label: "Done",
+        randomize_question_order: false
+    }
+    timeline.push(questionnaire_1); 
+
+
+    // Part 1 Completion 
+    var part_completion = {
+        type: "html-button-response",
+        stimulus: "<p>Great job!</p> You have completed part 1 of 2 of the experiment. <br></br>", 
+        choices: ['Continue']
+    };
+    timeline.push(part_completion); 
+
+
+
+/* --------------------------------------- Part 2: Associations Ratings ------------------------ */
+
+
+// Ratings trial //  -update instructions for this slider
+var rate_instructions = {
+                    type: 'image-slider-response_InstrMAS',  
+                    stimulus: "img/AllColoredHoriz-01.png",
+                   // stimulus_height: 150, 
+                    maintain_aspect_ratio: true,
+                    labels: ['Not at all', 'Very Much'],
+                    response_ends_trial: true,
+                    slider_width: 400,
+                    prompt1: "<p>During this experiment you will be presented with each of the colored squares from the set below, on at a time" +
+        "<br>You will be asked to rate how much you associate each color with alien species:</p>"+
+        "<p>FILK or SLUB</p>" +
+        "<p>You will be asked to rate the association between each color and species on a scale from 'Not at all' to 'Very much' like the one below."+
+        "<br>To respond, slide the cursor along the response scale and then click the 'Continue' button to record your response and start the next trial.</p>",
+                    prompt2: "<p>There will be two blocks of trials, one for each species. You will be asked to rate all of the colors for each species before going on to the next block."+
+        "<br>Before starting, take a look at all the colors presented here and think about which color you associate the most (Very much) and least (Not at All) for each species."+
+        "<br>Those colors represent the far ends of the rating scale, such that they would be rated on the far left/right and all other colors would be rated somewhere in-between.</p>",       
+                    require_movement: false, 
+                    step: 1,
+                    start: 0,
+                    min: -200,
+                    max: 200, 
+                    button_label: "Start"
+                    }
+    timeline.push(rate_instructions); 
+
+
+
+// Ratings preparation: set up conditions and counters 
+    var numSpecies = 2; 
+
+    var numColors
+    (numColors = []).length = 15; numColors.fill(0) 
+    var speciesCounter
+    (speciesCounter = []).length = 2; speciesCounter.fill(0)
+    var speciesText = ["FILK", "SLUB"];
+    var objectCaption = "";
+    var Counter1 = [
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    ];
+    var Counter2 =[
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    ];
+    var Counter = [Counter1, Counter2];
+    
+
+  /* Colored Squares coding 
+        {stimulus: "img/Color0.bmp"}, // P red
+        {stimulus: "img/Color1.bmp"}, // NP red
+        {stimulus: "img/Color2.bmp"}, // P orange
+        {stimulus: "img/Color3.bmp"}, // NP orange
+        {stimulus: "img/Color4.bmp"}, // P yellow
+        {stimulus: "img/Color5.bmp"}, // NP yellow
+        {stimulus: "img/Color6.bmp"}, // P green
+        {stimulus: "img/Color7.bmp"}, // NP green
+        {stimulus: "img/Color8.bmp"}, // P blue
+        {stimulus: "img/Color9.bmp"}, // NP blue
+        {stimulus: "img/Color10.bmp"}, // P purple
+        {stimulus: "img/Color11.bmp"}, // NP purple
+        {stimulus: "img/Color12.bmp"}, // black
+        {stimulus: "img/Color13.bmp"}, // white
+        {stimulus: "img/Color14.bmp"}, // gray */ 
+
+
+
+/* Association ratings Trial sequence */     
+
+// Randomly select which species //
+ for (obj =0; obj < speciesText.length;){   
+    var whichSpecies =  Math.random();  //Math.floor((Math.random() * 1)+0)  random(0,1);
+        if(whichSpecies<0.5){  
+            whichSpecies =Math.floor(whichSpecies)
+        }else{               
+            whichSpecies= Math.ceil(whichSpecies)
+        }
+    if (speciesCounter[whichSpecies] == 0) { 
+        var objectCaption = speciesText[whichSpecies]; //Sets the Species Name label for the block
+
+
+        // Block break: Only presents after the end of the first block //
+        if (obj > 0){
+        var block_break1 = {
+        type: "html-button-response",
+        stimulus:  "<p>Great Job! You finished the first block.<br></br> You'll now move to the next species.<br></br></p>",
+         choices: ['Continue'],   
+         };
+         timeline.push(block_break1)
+        }
+
+        // Block break: Presents at the start of each block  //
+        var block_break2 = {
+        type: "html-button-response",
+        stimulus:  "<p>In this block of trials, you will be asked to rate how much you associate each color with:</p> "+
+             "<p>"+objectCaption+"</p><br></br>",
+         choices: ['Continue'],   
+         };
+         timeline.push(block_break2)
+
+
+        // Repeat each color presentation twice // 
+        for (rep = 0; rep < 2;){
+                  
+            // Select a color  
+            for (color = 0; color < numColors.length;){   
+                function getRandomIntInclusive(min, max) {
+                    min = Math.ceil(min);
+                    max = Math.floor(max);
+                    return  Math.floor(Math.random() * (max - min + 1)); 
+                    }
+                    
+                // Randomly select a color
+                var whichColor = getRandomIntInclusive(0,numColors.length-1); 
+            
+                // Check if color/species/repetition has been presented yet. 
+                if (Counter[rep][whichSpecies][whichColor] == 0){
+
+
+                    // ITI // 
+                    timeline.push(fixation)
+
+                    // Ratings trial // 
+                    var rating_trial = {
+                    type: 'image-slider-responseMAS',  
+                    stimulus: "img/Color"+whichColor+".bmp",
+                    stimulus_height: 100, 
+                    maintain_aspect_ratio: true,
+                    labels: ['Not at all', 'Very Much'],
+                    response_ends_trial: true,
+                    slider_width: 400,
+                    prompt: objectCaption,
+                    require_movement: true, 
+                    //prompt_location: "above",
+                    step: 1,
+                    start: 0,
+                    min: -200,
+                    max: 200        
+                    }
+                    timeline.push(rating_trial)
+
+                    Counter[rep][whichSpecies][whichColor] = 1; 
+                    color++;
+                }else{
+                }
+            }
+        rep++
+        }
+        speciesCounter[whichSpecies] = 1;
+        obj++;    
+    }else{
+    }
+  }
+
+    // Questionnaire 2 //
+    var questionnaire_2 = {
+        type: 'survey-text',
+        questions: [
+            {prompt: "Did you notice any patterns or regularities in the colors of either alien species" +
+            " during the first task? <p> If so, what did you notice? If not please type 'None'.", name: "Patterns", rows: "6", columns: "60"}
+        ],
+        preamble: "Please answer the following question.",
+        button_label: "Done",
+        randomize_question_order: false
+    }
+    timeline.push(questionnaire_2); 
+
+
+    // Color Vision check //
+    var colorvision = {
+        type: 'survey-multi-choice',
+        questions: [
+            {prompt: "Do you have difficulty seeing colors or noticing differences<br>between colors compared to the average person?",
+            options: ["Yes", "No"],
+            horizontal: false,
+            required: true, 
+            name: 'colorDifficulty'},
+
+            {prompt: "Do you consider yourself to be colorblind? ",
+            options: ["Yes", "No"],
+            horizontal: false,
+            required: true, 
+            name: 'colorBlind'}
+        ],
+        preamble: "",
+        button_label: "Done",
+        randomize_question_order: false
+        }; 
+    timeline.push(colorvision); 
+  
+//Exit fullscreen
+timeline.push({
+    type: 'fullscreen',
+    fullscreen_mode: false
+})
+
+
+/* ---------------------------------- End of experiment ---------------------------------------- */
+
+// Final Completion //
+var end_completion = {
+    type: "html-keyboard-response",
+    stimulus: "<p>Great job! You have finished the experiment.</p>" +
+    "<p> Please click .... confirmation with mTurk. </p>"
+};
+timeline.push(end_completion); 
+
+
+/*<p>Enter the code you were given:</p>
+<input type="text" id="code"></input>
+<button onclick="sendData();">Submit HIT</button>
+
+<script>
+function sendData() {
+  jsPsych.turk.submitToTurk({
+    code: document.getElementById('code').value
+  });
+}*/
+
+
+// Run the timeline sequence //
+jsPsych.init({
+        timeline: timeline,
+        
+        // shows the output code- delete later once have files being written & saved /
+        on_finish: function() {
+            jsPsych.data.displayData();
+            jsPsych.data.get().localSave('csv','mydata.csv')
+        }
+    })
+    </script>
+   
+</html>
