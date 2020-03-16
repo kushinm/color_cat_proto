@@ -234,9 +234,7 @@ jsPsych.plugins['image-slider-response_InstrMAS'] = (function() {
       var trialdata = {
         "rt": response.rt,
         "stimulus": trial.stimulus,
-        "response": response.response,
-        "prompt1": trial.prompt1,
-        "prompt2": trial.prompt2
+        "response": response.response
       };
 
       display_element.innerHTML = '';

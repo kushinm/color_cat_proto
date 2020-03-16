@@ -140,7 +140,7 @@ var overview_instructions = {
             type: 'html-button-response',
             stimulus: 'Welcome! <p> This experiment involves three parts: demographic information, followed by two experimental tasks.' +
             '<p> It will take about 30 minutes to complete all three parts.' +
-            '<p> After completion you will be redirected to mTurk to be awarded credit for your participation.',
+            '<p> After completion you will be given a code to enter on mTurk to be receive payment for your participation.',
             choices: ['Continue']
         }
      timeline.push(overview_instructions);
@@ -280,6 +280,7 @@ var overview_instructions = {
 
             // Categorization trial for FILK
             if (whichShape < alienCounter.length/2){  // Code FILK images as < 90 
+                var whichPoint = whichShape; //Used for preloading images, but otherwise redundant with whichShape
                 var cat_trial = {
                     type: 'image-keyboard-responseMAS',
                     stimulus: "img/"+whichCondition+"/Point-"+whichShape+".png",
@@ -297,7 +298,7 @@ var overview_instructions = {
 
             // Categorization trial for SLUB
             } else if (whichShape >= alienCounter.length/2){   // Code SLUB images as >= 90
-                   var  whichCurvy = whichShape - (alienCounter.length/2); // This subtraction accounts for the numbers restarting for curvy, but if the random # generator picks a # > 75, itll be a slub
+                   var  whichCurvy = whichShape - 90;//(alienCounter.length/2); // This subtraction accounts for the numbers restarting for curvy, but if the random # generator picks a # > 75, itll be a slub
                     console.log(whichCurvy,alienCounter.length)
                     var cat_trial = {
                     type: 'image-keyboard-responseMAS',
@@ -358,7 +359,7 @@ var overview_instructions = {
              
             // SLUB feedback  Part 1: Give text feedback
             } else if (whichShape >= alienCounter.length/2){
-               // var  whichCurvy = whichShape - (alienCounter.length/2); 
+                var  whichCurvy = whichShape - 90;//(alienCounter.length/2); 
                 var text_feedback = {
                 type: 'image-keyboard-responseMAS',
                 stimulus: "img/"+whichCondition+"/Curvy-"+whichCurvy+".png",
@@ -670,10 +671,14 @@ timeline.push({
 /* ---------------------------------- End of experiment ---------------------------------------- */
 
 // Final Completion //
+    //Generate random 5 digit code
+    var mTurkCode = Math.floor((Math.random() * 10000) + 10000);
 var end_completion = {
     type: "html-keyboard-response",
     stimulus: "<p>Great job! You have finished the experiment.</p>" +
-    "<p> Please click .... confirmation with mTurk. </p>"
+    "<p> Please click enter the following code on your mTurk screen to confirm your participation.</p>"+
+    "<p>"+mTurkCode+"</p>"
+   // response_ends_trial: false
 };
 timeline.push(end_completion); 
 
@@ -688,7 +693,6 @@ function sendData() {
     code: document.getElementById('code').value
   });
 }*/
-
 
 
 
@@ -712,9 +716,9 @@ var imgSet = [] ;
 for (i = 0; i <= 1;i++){
     for (j =0; j <90;j++){
         if (i == 0){
-            alienName = "img/"+whichCondition+"/Point-"+whichShape+".png";
+            alienName = "img/"+whichCondition+"/Point-"+whichPoint+".png";
         }else{
-            alienName = "img/"+whichCondition+"/Curvy-"+whichShape+".png";
+            alienName = "img/"+whichCondition+"/Curvy-"+whichCurvy+".png";
         }
         imgSet[c] = alienName; 
         c = c+1; 
@@ -722,10 +726,6 @@ for (i = 0; i <= 1;i++){
     }
     console.log(imgSet)
 
-/*var imgSet = ["img/"+whichCondition+"/Point-0.png",
-            "img/"+whichCondition+"/Point-1.png",
-            "img/"+whichCondition+"/Curvy-0.png",
-            "img/"+whichCondition+"/Curvy-1.png",] ;*/
 
 // Run the timeline sequence //
 jsPsych.init({
@@ -734,10 +734,10 @@ jsPsych.init({
         preload_images: imgSet,
         //on_finish: saveData // this line calls function to save to database
         // shows the output code- delete later once have files being written & saved /
-       /* on_finish: function() {
-            jsPsych.data.displayData();
-            jsPsych.data.get().localSave('csv','mydata.csv')
-        }*/
+        on_finish: function() {
+           // jsPsych.data.displayData();
+            jsPsych.data.get().localSave('csv','alienCheck.csv')
+        }
     })
     </script>
    

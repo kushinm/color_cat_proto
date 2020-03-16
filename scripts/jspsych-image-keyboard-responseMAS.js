@@ -194,8 +194,7 @@ jsPsych.plugins["image-keyboard-responseMAS"] = (function() {
       var trial_data = {
         "rt": response.rt,
         "stimulus": trial.stimulus,
-        "key_press": response.key,
-        "block": whichBlock
+        "key_press": response.key
       };
 
       // clear the display
