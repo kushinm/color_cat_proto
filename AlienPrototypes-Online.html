@@ -155,13 +155,13 @@ var overview_instructions = {
             {prompt: "Gender",
             options: ["Male", "Female", "Other"],
             horizontal: false,
-            required: false, 
+            required: true, 
             name: 'Gender'},
 
             {prompt: "Preferred hand",
             options: ["Left", "Right"],
             horizontal: false,
-            required: false, 
+            required: true, 
             name: 'Hand'},
         ],
         preamble: "Please respond to the following questions.",
@@ -178,13 +178,13 @@ var overview_instructions = {
             {prompt: "",
             options: ["Caucasian", "Black", "Asian","Pacific Islander", "Other"],
             horizontal: false,
-            required: false, 
+            required: true, 
             name: 'Race/Ethnic'},
 
             {prompt: "",
             options: ["Hispanic or Latino", "Not Hispanic or Latino"],
             horizontal: false,
-            required: false, 
+            required: true, 
             name: 'Hispanic/Latino'},
             ],
         preamble: "Please select all that apply.",
@@ -198,8 +198,8 @@ var overview_instructions = {
     var age_lang_demo = {
             type: 'survey-text',
             questions: [
-                {prompt: "Age", name: 'Age', rows: "1", columns: "3"},
-                {prompt: "List all languages spoken", name: "Languages", rows: "6", columns: "60"}
+                {prompt: "Age", name: 'Age', rows: "1", columns: "3", required: true,},
+                {prompt: "List all languages spoken", name: "Languages", rows: "6", columns: "60", required: true,}
             ],
             preamble: "Please answer the following questions.",
             button_label: "Done",
@@ -262,7 +262,7 @@ var overview_instructions = {
 
                            
 // Categorization Procedure // 
-    for (t =0; t < alienCounter.length;){    // FIX BECAUSE IMAGES START AT 1 BUT THIS WANTS TO CALL TO 0. 
+    for (t =0; t < 5;){//alienCounter.length;){    // 
     
 
         // Randomly selecting an alien
@@ -272,7 +272,6 @@ var overview_instructions = {
                     return  Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
                     }
         var whichShape =  getRandomIntInclusive(0,alienCounter.length);
-        //whichShape = whichShape +1; // add 1 because starts at 0. 
         if (alienCounter[whichShape] == 0){
 
             // ITI
@@ -447,9 +446,9 @@ var overview_instructions = {
     var questionnaire_1 = {
         type: 'survey-text',
         questions: [
-            {prompt: "Please describe what strategy you used for the previous task.", name: 'Strategy', rows: "6", columns: "60"},
+            {prompt: "Please describe what strategy you used for the previous task.", name: 'Strategy', rows: "6", columns: "60", required: true},
             {prompt: "Were there any visual features that you paid particular attention to complete the previous task?" +
-            "<br>If so, what features did you attend to? If not please type 'None'.", name: "Features", rows: "6", columns: "60"}
+            "<br>If so, what features did you attend to? If not please type 'None'.", name: "Features", rows: "6", columns: "60", required: true}
         ],
         preamble: "Please answer the following questions.",
         button_label: "Done",
@@ -503,7 +502,7 @@ var rate_instructions = {
     var numSpecies = 2; 
 
     var numColors
-    (numColors = []).length = 15; numColors.fill(0) 
+    (numColors = []).length = 1; numColors.fill(0) 
     var speciesCounter
     (speciesCounter = []).length = 2; speciesCounter.fill(0)
     var speciesText = ["FILK", "SLUB"];
@@ -630,7 +629,7 @@ var rate_instructions = {
         type: 'survey-text',
         questions: [
             {prompt: "Did you notice any patterns or regularities in the colors of either alien species" +
-            " during the first task? <p> If so, what did you notice? If not please type 'None'.", name: "Patterns", rows: "6", columns: "60"}
+            " during the first task? <p> If so, what did you notice? If not please type 'None'.", name: "Patterns", rows: "6", columns: "60", required: true}
         ],
         preamble: "Please answer the following question.",
         button_label: "Done",
@@ -670,17 +669,56 @@ timeline.push({
 
 /* ---------------------------------- End of experiment ---------------------------------------- */
 
-// Final Completion //
-    //Generate random 5 digit code
-    var mTurkCode = Math.floor((Math.random() * 10000) + 10000);
-var end_completion = {
-    type: "html-keyboard-response",
-    stimulus: "<p>Great job! You have finished the experiment.</p>" +
-    "<p> Please click enter the following code on your mTurk screen to confirm your participation.</p>"+
-    "<p>"+mTurkCode+"</p>"
-   // response_ends_trial: false
-};
-timeline.push(end_completion); 
+  //Generate random 5 digit code for mTurk
+  var mTurkCode = Math.floor((Math.random() * 10000) + 10000);
+
+
+  //Present completion screen & record data
+  var end_completion = {
+             type: "html-keyboard-response",
+             stimulus: function(){
+                jsPsych.data.get().localSave('csv',mTurkCode+".csv")
+                return "<p>Great job! You have finished the experiment.</p>" +
+             "<p> Please enter the following code on your mTurk screen to confirm your participation.</p>"+
+            "<p>"+mTurkCode+"</p>" +
+            "<p>After entering your code, please close this window.</p>";},
+            choices: jsPsych.NO_KEYS} //Prevents any input reponse from moving beyond the screen
+    timeline.push(end_completion)
+
+
+// Preload images
+var c = 0; 
+var imgSet = [] ;
+for (i = 0; i <= 1;i++){
+    for (j =0; j <90;j++){
+        if (i == 0){
+            alienName = "img/"+whichCondition+"/Point-"+whichPoint+".png";
+        }else{
+            alienName = "img/"+whichCondition+"/Curvy-"+whichCurvy+".png";
+        }
+        imgSet[c] = alienName; 
+        c = c+1; 
+        }
+    }
+    console.log(imgSet)
+
+
+// Run the timeline sequence //
+jsPsych.init({
+    // condition selection + preload images here. 
+        timeline: timeline,
+        preload_images: imgSet,
+     
+        //on_finish: saveData // this line calls function to save to database
+        // shows the output code- delete later once have files being written & saved /
+        on_finish: function() {
+            //jsPsych.data.displayData();
+            //on_close
+           // jsPsych.data.get().localSave('csv',mTurkCode+".csv")
+        }
+    })
+
+
 
 // mTurk connections //
 /*<p>Enter the code you were given:</p>
@@ -711,34 +749,6 @@ function sendData() {
 }*/
 
 
-var c = 0; 
-var imgSet = [] ;
-for (i = 0; i <= 1;i++){
-    for (j =0; j <90;j++){
-        if (i == 0){
-            alienName = "img/"+whichCondition+"/Point-"+whichPoint+".png";
-        }else{
-            alienName = "img/"+whichCondition+"/Curvy-"+whichCurvy+".png";
-        }
-        imgSet[c] = alienName; 
-        c = c+1; 
-        }
-    }
-    console.log(imgSet)
-
-
-// Run the timeline sequence //
-jsPsych.init({
-    // condition selection + preload images here. 
-        timeline: timeline,
-        preload_images: imgSet,
-        //on_finish: saveData // this line calls function to save to database
-        // shows the output code- delete later once have files being written & saved /
-        on_finish: function() {
-           // jsPsych.data.displayData();
-            jsPsych.data.get().localSave('csv','alienCheck.csv')
-        }
-    })
     </script>
    
 </html>
