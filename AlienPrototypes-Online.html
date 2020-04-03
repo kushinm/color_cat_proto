@@ -672,12 +672,17 @@ timeline.push({
   //Generate random 5 digit code for mTurk
   var mTurkCode = Math.floor((Math.random() * 10000) + 10000);
 
+// with call-function plugin
+  /*  timeline.push({
+    type: 'call-function',
+    func: saveData
+    });*/
 
   //Present completion screen & record data
   var end_completion = {
              type: "html-keyboard-response",
              stimulus: function(){
-                jsPsych.data.get().localSave('csv',mTurkCode+".csv")
+                jsPsych.data.get().localSave('csv',mTurkCode+".csv") // right now, saves to local device
                 return "<p>Great job! You have finished the experiment.</p>" +
              "<p> Please enter the following code on your mTurk screen to confirm your participation.</p>"+
             "<p>"+mTurkCode+"</p>" +
@@ -734,7 +739,7 @@ function sendData() {
 
 
 
-//server calling with AJAX? 
+//server calling with AJAX
 /*function saveData() {
   var xhr = new XMLHttpRequest();
   xhr.open('POST', 'write_data.php'); // change 'write_data.php' to point to php script.
